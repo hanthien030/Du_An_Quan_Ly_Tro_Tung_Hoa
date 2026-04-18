@@ -862,13 +862,13 @@ Tháng: [05 ▼]  Năm: [2025 ▼]  [Xem]  [Tạo tất cả HĐ tháng này]
 #### Từng Màn Hình
 - [x] `dashboard.html` + `dashboard.js` (KPI cards, chart, cảnh báo)
 - [x] `phong/index.html` + `phong.js` (grid view, modal CRUD)
-- [ ] `phong/form.html` (form thêm/sửa nếu dùng trang riêng)
+- [x] `phong/form.html` (form thêm~/sửa nếu dùng trang riên~~g)
 - [x] `khach_thue/index.html` (table, search, modal CRUD)
 - [x] `hop_dong/index.html` (table, filter, modal tạo/gia hạn)
 - [x] `bang_gia/index.html` (form nhập giá theo tháng, lock indicator)
 - [x] `thanh_toan/index.html` + `thanh_toan.js` (bảng inline-edit)
 - [x] `hoa_don/index.html` (danh sách + nút tạo batch)
-- [ ] `hoa_don/detail.html` (chi tiết 1 hóa đơn + xuất PDF)
+- [x] `hoa_don/detail.html` (chi tiết 1 hóa đơn + xuất PDF)
 - [x] `thong_ke/index.html` + `thong_ke.js` (Chart.js bar chart)
 - [ ] `pdf/hoa_don_pdf.html` (template PDF — không có sidebar)
 
@@ -906,9 +906,10 @@ Tháng: [05 ▼]  Năm: [2025 ▼]  [Xem]  [Tạo tất cả HĐ tháng này]
 > Cập nhật thực tế ngày 18/04/2026:
 > - Phase 3 đã hoàn tất, gồm test models, test API phòng, test invoice service, manual happy path, lock bảng giá `423` và responsive verification.
 > - `README.md` đã được nâng lên mức handoff/demo-ready và đã thêm `HANDOFF_NOTES.md`.
-> - Phase 2 vẫn còn đúng 3 mục artifact chưa tick: `phong/form.html`, `hoa_don/detail.html`, `pdf/hoa_don_pdf.html`.
-> - Hai mục `phong/form.html` và `hoa_don/detail.html` hiện được thay bằng modal trong trang index tương ứng; không tick bổ sung để tránh over-claim.
-> - `app/templates/pdf/hoa_don_pdf.html` đã có trong repo và được `pdf_service.py` dùng khi WeasyPrint khả dụng, nhưng checklist vẫn giữ `[ ]` do artifact này chưa được chốt riêng như một deliverable frontend độc lập và runtime vẫn có fallback PDF tối thiểu.
+> - Phase 2 đã tick thêm `phong/form.html` và `hoa_don/detail.html` sau khi browser-verify route riêng, submit thêm/sửa phòng thành công và mở trang chi tiết hóa đơn + xuất PDF thật.
+> - `app/templates/pdf/hoa_don_pdf.html` đã được hoàn thiện thêm với layout hóa đơn đầy đủ; tuy nhiên dev runtime hiện vẫn không render được qua WeasyPrint vì thiếu native lib `gobject-2.0-0`.
+> - `pdf_service.py` đã được nâng cấp fallback PDF dựa trên Pillow + font hệ thống, xuất ra hóa đơn có bố cục đầy đủ và hiển thị tiếng Việt tốt khi dữ liệu đầu vào đúng Unicode.
+> - Checklist `pdf/hoa_don_pdf.html` vẫn giữ `[ ]` theo strict mode cho đến khi runtime này render thật template HTML-to-PDF thay vì fallback.
 
 ## 9. Conventions & Code Style
 

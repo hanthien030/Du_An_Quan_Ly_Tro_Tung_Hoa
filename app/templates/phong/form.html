@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Sửa Phòng' if form_mode == 'edit' else 'Thêm Phòng' }}{% endblock %}
+{% block page_title %}{{ 'Sửa Phòng' if form_mode == 'edit' else 'Thêm Phòng' }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-xl-7">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="mb-1">{{ 'Cập nhật thông tin phòng' if form_mode == 'edit' else 'Tạo phòng mới' }}</h5>
+        <div class="text-muted small">Trang form riêng cho thao tác thêm/sửa phòng.</div>
+      </div>
+      <a href="/phong" class="btn btn-outline-secondary btn-sm">
+        <i class="bi bi-arrow-left me-1"></i>Quay lại danh sách
+      </a>
+    </div>
+
+    <div class="card p-4">
+      {% if error %}
+      <div class="alert alert-danger py-2" role="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="post" action="{{ form_action }}" novalidate>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="so_phong" class="form-label">Số phòng <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="so_phong" name="so_phong" value="{{ room_data.get('so_phong', '') }}" required>
+          </div>
+          <div class="col-md-3">
+            <label for="tang" class="form-label">Tầng</label>
+            <input type="number" class="form-control" id="tang" name="tang" min="1" value="{{ room_data.get('tang', 1) }}">
+          </div>
+          <div class="col-md-3">
+            <label for="dien_tich" class="form-label">Diện tích (m²)</label>
+            <input type="number" class="form-control" id="dien_tich" name="dien_tich" step="0.1" value="{{ room_data.get('dien_tich', '') }}">
+          </div>
+
+          <div class="col-md-6">
+            <label for="cap_phong" class="form-label">Cấp phòng</label>
+            <select class="form-select" id="cap_phong" name="cap_phong">
+              <option value="cap1" {% if room_data.get('cap_phong') == 'cap1' %}selected{% endif %}>Cấp 1 (cơ bản)</option>
+              <option value="cap2" {% if room_data.get('cap_phong') == 'cap2' %}selected{% endif %}>Cấp 2 (đầy đủ)</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="trang_thai" class="form-label">Trạng thái</label>
+            <select class="form-select" id="trang_thai" name="trang_thai">
+              <option value="trong" {% if room_data.get('trang_thai') == 'trong' %}selected{% endif %}>Trống</option>
+              <option value="dang_thue" {% if room_data.get('trang_thai') == 'dang_thue' %}selected{% endif %}>Đang thuê</option>
+              <option value="sua_chua" {% if room_data.get('trang_thai') == 'sua_chua' %}selected{% endif %}>Sửa chữa</option>
+            </select>
+          </div>
+
+          <div class="col-12">
+            <label for="mo_ta" class="form-label">Ghi chú</label>
+            <textarea class="form-control" id="mo_ta" name="mo_ta" rows="3">{{ room_data.get('mo_ta', '') }}</textarea>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <a href="/phong" class="btn btn-outline-secondary">Hủy</a>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-check2-circle me-1"></i>{{ 'Lưu thay đổi' if form_mode == 'edit' else 'Tạo phòng' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

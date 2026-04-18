@@ -5,8 +5,11 @@
 {% block content %}
 <!-- Toolbar -->
 <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
-  <button class="btn btn-primary btn-sm" onclick="openModal()">
+  <a class="btn btn-primary btn-sm" href="/phong/form">
     <i class="bi bi-plus-lg me-1"></i>Thêm Phòng
+  </a>
+  <button class="btn btn-outline-secondary btn-sm" onclick="openModal()">
+    <i class="bi bi-window-stack me-1"></i>Mở modal nhanh
   </button>
   <select id="filter-tt" class="form-select form-select-sm w-auto" onchange="loadRooms()">
     <option value="">Tất cả</option>
@@ -87,7 +90,8 @@
       </div>
       <div class="modal-body" id="detail-body"></div>
       <div class="modal-footer">
-        <button class="btn btn-outline-primary btn-sm" id="btn-edit-detail">Sửa</button>
+        <button class="btn btn-outline-primary btn-sm" id="btn-edit-detail">Sửa trang riêng</button>
+        <button class="btn btn-outline-secondary btn-sm" id="btn-edit-modal">Sửa bằng modal</button>
         <button class="btn btn-outline-danger btn-sm" id="btn-del-detail">Xóa</button>
         <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
       </div>

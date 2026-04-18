@@ -4,111 +4,293 @@
   <meta charset="utf-8">
   <title>Hóa đơn tiền phòng</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DejaVu Sans', Arial, sans-serif; font-size: 13px; color: #1a1a1a; padding: 20px 32px; }
-    .header { text-align: center; margin-bottom: 20px; }
-    .header h1 { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-    .header p { color: #555; font-size: 12px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; background: #fafafa; }
-    .info-grid .label { color: #666; font-size: 11px; }
-    .info-grid .value { font-weight: 600; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-    th, td { padding: 8px 10px; }
-    th { background: #1e2a3a; color: #fff; font-size: 11px; text-transform: uppercase; text-align: left; }
-    td { border-bottom: 1px solid #f0f0f0; }
-    tr:last-child td { border-bottom: none; }
-    .text-right { text-align: right; }
-    .total-row { background: #eff6ff; font-weight: 700; font-size: 14px; }
-    .footer { margin-top: 24px; display: flex; justify-content: space-between; font-size: 12px; color: #555; }
-    .sig { text-align: center; }
-    .sig .line { border-top: 1px solid #aaa; margin-top: 40px; padding-top: 4px; font-size: 11px; }
+    @page {
+      size: A4;
+      margin: 14mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Tahoma, "DejaVu Sans", sans-serif;
+      color: #1f2937;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .page {
+      width: 100%;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #19324a 0%, #254b72 100%);
+      color: #fff;
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .brand {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0.92;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 8px 0 6px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      opacity: 0.88;
+    }
+
+    .status {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .info-grid {
+      border: 1px solid #d6dde8;
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 16px 20px 6px;
+      margin-bottom: 18px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 14px;
+    }
+
+    .info-item {
+      flex: 1;
+    }
+
+    .label {
+      color: #64748b;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+    }
+
+    thead th {
+      background: #2f6fed;
+      color: #fff;
+      padding: 11px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      text-align: left;
+    }
+
+    thead th:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    thead th:last-child {
+      border-top-right-radius: 12px;
+      text-align: right;
+    }
+
+    tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #fbfdff;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .total-box {
+      margin-top: 8px;
+      border: 1px solid #d6dde8;
+      border-radius: 16px;
+      background: #eef4ff;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-box .label-strong {
+      font-size: 16px;
+      font-weight: 700;
+      color: #19324a;
+      text-transform: uppercase;
+    }
+
+    .total-box .value-strong {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2f6fed;
+    }
+
+    .note-box {
+      margin-top: 18px;
+      border: 1px solid #d6dde8;
+      border-radius: 16px;
+      padding: 14px 18px;
+      background: #fff;
+    }
+
+    .note-box p {
+      margin: 6px 0 0;
+      color: #475569;
+    }
+
+    .signatures {
+      display: flex;
+      justify-content: space-between;
+      gap: 48px;
+      margin-top: 42px;
+    }
+
+    .signature {
+      flex: 1;
+      text-align: center;
+    }
+
+    .signature .line {
+      margin-top: 56px;
+      border-top: 1px solid #94a3b8;
+      padding-top: 6px;
+      color: #64748b;
+      font-size: 11px;
+    }
   </style>
 </head>
 <body>
-
-<div class="header">
-  <h1>Hóa Đơn Tiền Phòng</h1>
-  <p>Tháng {{ hd.thang }}/{{ hd.nam }} — Ngày lập: {{ hd.ngay_tao }}</p>
-</div>
-
-<div class="info-grid">
-  <div>
-    <div class="label">Phòng</div>
-    <div class="value">Phòng {{ hd.so_phong }}</div>
-  </div>
-  <div>
-    <div class="label">Khách thuê</div>
-    <div class="value">{{ hd.ho_ten }}</div>
-  </div>
-  <div>
-    <div class="label">Kỳ thanh toán</div>
-    <div class="value">Tháng {{ hd.thang }}/{{ hd.nam }}</div>
-  </div>
-  <div>
-    <div class="label">Trạng thái</div>
-    <div class="value">{{ 'Đã thanh toán' if hd.trang_thai == 'da_tt' else 'Chưa thanh toán' }}</div>
-  </div>
-</div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Khoản mục</th>
-      <th>Số lượng</th>
-      <th>Đơn giá</th>
-      <th class="text-right">Thành tiền</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Tiền phòng</td>
-      <td>1 tháng</td>
-      <td>{{ '{:,.0f}'.format(hd.tien_phong) }} đ</td>
-      <td class="text-right">{{ '{:,.0f}'.format(hd.tien_phong) }} đ</td>
-    </tr>
-    <tr>
-      <td>Tiền điện</td>
-      <td>{{ hd.so_dien }} kWh</td>
-      <td>{{ '{:,.0f}'.format(hd.snapshot_don_gia_dien or 0) }} đ/kWh</td>
-      <td class="text-right">{{ '{:,.0f}'.format(hd.tien_dien) }} đ</td>
-    </tr>
-    <tr>
-      <td>Tiền nước</td>
-      <td>{{ hd.so_nuoc }} m³</td>
-      <td>{{ '{:,.0f}'.format(hd.snapshot_don_gia_nuoc or 0) }} đ/m³</td>
-      <td class="text-right">{{ '{:,.0f}'.format(hd.tien_nuoc) }} đ</td>
-    </tr>
-    {% if hd.phi_dich_vu > 0 %}
-    <tr>
-      <td>Phí dịch vụ (Wifi + Vệ sinh + Gửi xe)</td>
-      <td>—</td>
-      <td>—</td>
-      <td class="text-right">{{ '{:,.0f}'.format(hd.phi_dich_vu) }} đ</td>
-    </tr>
-    {% endif %}
-    <tr class="total-row">
-      <td colspan="3">TỔNG CỘNG</td>
-      <td class="text-right">{{ '{:,.0f}'.format(hd.tong_tien) }} đ</td>
-    </tr>
-  </tbody>
-</table>
-
-<div class="footer">
-  <div>
-    <p>Ghi chú: {{ hd.ghi_chu or 'Không có' }}</p>
-    <p style="margin-top:4px;color:#888;font-size:11px;">Hóa đơn này được tạo tự động bởi hệ thống.</p>
-  </div>
-  <div class="d-flex gap-5" style="display:flex;gap:60px">
-    <div class="sig">
-      <p>Người thuê</p>
-      <div class="line">Ký tên</div>
+  <div class="page">
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="brand">Nhà trọ bình dân</div>
+          <div class="title">Hóa đơn tiền phòng</div>
+          <div class="subtitle">Kỳ thanh toán {{ hd.thang }}/{{ hd.nam }} • Ngày lập {{ hd.formatted_ngay_tao }}</div>
+        </div>
+        <div class="status">{{ hd.status_label }}</div>
+      </div>
     </div>
-    <div class="sig">
-      <p>Chủ nhà trọ</p>
-      <div class="line">Ký tên</div>
+
+    <div class="info-grid">
+      <div class="info-row">
+        <div class="info-item">
+          <div class="label">Phòng</div>
+          <div class="value">Phòng {{ hd.so_phong }}</div>
+        </div>
+        <div class="info-item">
+          <div class="label">Khách thuê</div>
+          <div class="value">{{ hd.ho_ten }}</div>
+        </div>
+      </div>
+      <div class="info-row">
+        <div class="info-item">
+          <div class="label">Kỳ thanh toán</div>
+          <div class="value">Tháng {{ hd.thang }}/{{ hd.nam }}</div>
+        </div>
+        <div class="info-item">
+          <div class="label">Điện / Nước</div>
+          <div class="value">{{ hd.so_dien }} kWh • {{ hd.so_nuoc }} m³</div>
+        </div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Khoản mục</th>
+          <th>Số lượng</th>
+          <th>Đơn giá</th>
+          <th class="text-right">Thành tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Tiền phòng</strong></td>
+          <td>1 tháng</td>
+          <td>{{ "{:,.0f}".format(hd.snapshot_gia_phong).replace(",", ".") }} đ</td>
+          <td class="text-right">{{ "{:,.0f}".format(hd.tien_phong).replace(",", ".") }} đ</td>
+        </tr>
+        <tr>
+          <td><strong>Tiền điện</strong></td>
+          <td>{{ hd.so_dien }} kWh</td>
+          <td>{{ "{:,.0f}".format(hd.snapshot_don_gia_dien).replace(",", ".") }} đ/kWh</td>
+          <td class="text-right">{{ "{:,.0f}".format(hd.tien_dien).replace(",", ".") }} đ</td>
+        </tr>
+        <tr>
+          <td><strong>Tiền nước</strong></td>
+          <td>{{ hd.so_nuoc }} m³</td>
+          <td>{{ "{:,.0f}".format(hd.snapshot_don_gia_nuoc).replace(",", ".") }} đ/m³</td>
+          <td class="text-right">{{ "{:,.0f}".format(hd.tien_nuoc).replace(",", ".") }} đ</td>
+        </tr>
+        <tr>
+          <td><strong>Phí dịch vụ</strong></td>
+          <td>Wifi + Vệ sinh + Gửi xe</td>
+          <td>—</td>
+          <td class="text-right">{{ "{:,.0f}".format(hd.phi_dich_vu).replace(",", ".") }} đ</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="total-box">
+      <div class="label-strong">Tổng cộng</div>
+      <div class="value-strong">{{ "{:,.0f}".format(hd.tong_tien).replace(",", ".") }} đ</div>
+    </div>
+
+    <div class="note-box">
+      <div class="label">Ghi chú</div>
+      <p>{{ hd.ghi_chu or 'Không có' }}</p>
+    </div>
+
+    <div class="signatures">
+      <div class="signature">
+        <div>Người thuê</div>
+        <div class="line">Ký và ghi rõ họ tên</div>
+      </div>
+      <div class="signature">
+        <div>Chủ nhà trọ</div>
+        <div class="line">Ký và ghi rõ họ tên</div>
+      </div>
     </div>
   </div>
-</div>
-
 </body>
 </html>

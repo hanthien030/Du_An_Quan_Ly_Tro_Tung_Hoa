@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Chi Tiết Hóa Đơn{% endblock %}
+{% block page_title %}Chi Tiết Hóa Đơn{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h5 class="mb-1">Hóa đơn phòng {{ hd.so_phong }}</h5>
+    <div class="text-muted small">Kỳ thanh toán {{ hd.thang }}/{{ hd.nam }} • Mã hóa đơn #{{ hd.hoadon_id }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="/hoa-don" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-arrow-left me-1"></i>Quay lại danh sách
+    </a>
+    <a href="/api/hoa-don/{{ hd.hoadon_id }}/pdf" class="btn btn-danger btn-sm" target="_blank">
+      <i class="bi bi-file-pdf me-1"></i>Xuất PDF
+    </a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card p-4 h-100">
+      <h6 class="section-title mb-3">Thông tin chung</h6>
+      <dl class="row mb-0 small">
+        <dt class="col-5">Phòng</dt><dd class="col-7">{{ hd.so_phong }}</dd>
+        <dt class="col-5">Khách thuê</dt><dd class="col-7">{{ hd.ho_ten }}</dd>
+        <dt class="col-5">Trạng thái</dt><dd class="col-7">{{ 'Đã thanh toán' if hd.trang_thai == 'da_tt' else 'Chưa thanh toán' }}</dd>
+        <dt class="col-5">Ngày tạo</dt><dd class="col-7">{{ hd.ngay_tao }}</dd>
+        <dt class="col-5">Điện / Nước</dt><dd class="col-7">{{ hd.so_dien }} kWh / {{ hd.so_nuoc }} m³</dd>
+        <dt class="col-5">Ghi chú</dt><dd class="col-7">{{ hd.ghi_chu or 'Không có' }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="section-title mb-0">Chi tiết thành tiền</h6>
+        <span class="badge {{ 'badge-da_tt' if hd.trang_thai == 'da_tt' else 'badge-chua_tt' }}">
+          {{ 'Đã thanh toán' if hd.trang_thai == 'da_tt' else 'Chưa thanh toán' }}
+        </span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Khoản mục</th>
+              <th>Số lượng</th>
+              <th class="text-end">Đơn giá</th>
+              <th class="text-end">Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tiền phòng</td>
+              <td>1 tháng</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.snapshot_gia_phong) }} đ</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.tien_phong) }} đ</td>
+            </tr>
+            <tr>
+              <td>Tiền điện</td>
+              <td>{{ hd.so_dien }} kWh</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.snapshot_don_gia_dien) }} đ/kWh</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.tien_dien) }} đ</td>
+            </tr>
+            <tr>
+              <td>Tiền nước</td>
+              <td>{{ hd.so_nuoc }} m³</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.snapshot_don_gia_nuoc) }} đ/m³</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.tien_nuoc) }} đ</td>
+            </tr>
+            <tr>
+              <td>Phí dịch vụ</td>
+              <td>Wifi + Vệ sinh + Gửi xe</td>
+              <td class="text-end">—</td>
+              <td class="text-end">{{ "{:,.0f}".format(hd.phi_dich_vu) }} đ</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="table-secondary fw-bold">
+              <td colspan="3" class="text-end">TỔNG CỘNG</td>
+              <td class="text-end text-primary">{{ "{:,.0f}".format(hd.tong_tien) }} đ</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
