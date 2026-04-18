@@ -1,89 +1,89 @@
 # Handoff Notes
 
-## Tong quan
+## Tổng quan
 
-Repo hien o muc demo-ready cho bai toan quan ly day tro nho. Luong nghiep vu chinh da chay duoc, suite test xanh, va browser/manual verification cho Phase 3 da hoan tat.
+Repo hiện ở mức demo-ready cho bài toán quản lý dãy trọ nhỏ. Luồng nghiệp vụ chính đã chạy được, suite test xanh, và browser/manual verification cho Phase 3 đã hoàn tất.
 
-## Trang thai checklist
+## Trạng thái checklist
 
 ### Phase 0
 
-- Hoan tat
+- Hoàn tất
 
 ### Phase 1
 
-- Hoan tat
-- Cac module API chinh da co: phong, khach-thue, hop-dong, bang-gia, thanh-toan, hoa-don, thong-ke
+- Hoàn tất
+- Các module API chính đã có: phòng, khách-thuê, hợp-đồng, bảng-giá, thanh-toán, hóa-đơn, thống-kê
 
 ### Phase 2
 
-- Da hoan thanh phan lon giao dien dung cho demo thuc te
-- Cac man chinh da co va da duoc verify: dashboard, phong, khach-thue, hop-dong, bang-gia, thanh-toan, hoa-don, thong-ke
-- Con 3 muc checklist de `[ ]` trong `PLAN.md`, khong tick bo sung trong handoff nay:
+- Đã hoàn thành phần lớn giao diện dùng cho demo thực tế
+- Các màn chính đã có và đã được verify: dashboard, phòng, khách-thuê, hợp-đồng, bảng-giá, thanh-toán, hóa-đơn, thống-kê
+- Còn 3 mục checklist để `[ ]` trong `PLAN.md`, không tick bổ sung trong handoff này:
 
 `phong/form.html`
-File nay chua ton tai vi man Phong dang dung modal CRUD ngay trong `phong/index.html`, khong dung page form rieng.
+File này chưa tồn tại vì màn Phòng đang dùng modal CRUD ngay trong `phong/index.html`, không dùng page form riêng.
 
 `hoa_don/detail.html`
-File nay chua ton tai vi chi tiet hoa don hien dang hien thi qua modal trong `hoa_don/index.html`, khong dung trang detail rieng.
+File này chưa tồn tại vì chi tiết hóa đơn hiện đang hiển thị qua modal trong `hoa_don/index.html`, không dùng trang detail riêng.
 
 `pdf/hoa_don_pdf.html`
-Template nay thuc te da co trong repo va dang duoc `pdf_service.py` goi khi WeasyPrint kha dung. Tuy nhien checklist frontend ban dau van de mo vi artifact nay chua duoc dong nhu mot deliverable giao dien rieng trong giai doan Front-end, va runtime van co the roi vao fallback PDF toi thieu neu may demo thieu native libs cua WeasyPrint. De tranh over-claim, muc nay van giu `[ ]`.
+Template này thực tế đã có trong repo và đang được `pdf_service.py` gọi khi WeasyPrint khả dụng. Tuy nhiên checklist frontend ban đầu vẫn để mở vì artifact này chưa được đóng như một deliverable giao diện riêng trong giai đoạn Front-end, và runtime vẫn có thể rơi vào fallback PDF tối thiểu nếu máy demo thiếu native libs của WeasyPrint. Để tránh over-claim, mục này vẫn giữ `[ ]`.
 
 ### Phase 3
 
-- Hoan tat
-- Da co test models, API phong, invoice service
-- Da verify happy path thu cong / browser
-- Da verify lock bang gia `423`
-- Da verify responsive o mobile, tablet, desktop
+- Hoàn tất
+- Đã có test models, API phòng, invoice service
+- Đã verify happy path thủ công / browser
+- Đã verify lock bảng giá `423`
+- Đã verify responsive ở mobile, tablet, desktop
 
 ### Phase 4
 
-- Moi chi hoan thanh phan README/handoff tai lieu
-- Cac muc con lai nhu deploy, slide demo, seed demo day hon van chua dong
+- Mới chỉ hoàn thành phần README/handoff tài liệu
+- Các mục còn lại như deploy, slide demo, seed demo dày hơn vẫn chưa đóng
 
-## Cach demo nhanh trong 5 phut
+## Cách demo nhanh trong 5 phút
 
-### Cach 1: Demo bang du lieu seed san
+### Cách 1: Demo bằng dữ liệu seed sẵn
 
-1. Chay `.\venv\Scripts\python.exe seed.py`
-2. Chay app bang `.\venv\Scripts\python.exe run.py`
-3. Mo `/dashboard` de gioi thieu KPI va doanh thu thang
-4. Mo `/phong` de xem phong dang thue, phong trong, phong sua chua
-5. Mo `/hop-dong` de chi ra hop dong hieu luc va hop dong sap het han
-6. Mo `/thanh-toan` de xem ban ghi thanh toan thang hien tai
-7. Mo `/hoa-don` de xem hoa don co san va thu xuat PDF
+1. Chạy `.\venv\Scripts\python.exe seed.py`
+2. Chạy app bằng `.\venv\Scripts\python.exe run.py`
+3. Mở `/dashboard` để giới thiệu KPI và doanh thu tháng
+4. Mở `/phong` để xem phòng đang thuê, phòng trống, phòng sửa chữa
+5. Mở `/hop-dong` để chỉ ra hợp đồng hiệu lực và hợp đồng sắp hết hạn
+6. Mở `/thanh-toan` để xem bản ghi thanh toán tháng hiện tại
+7. Mở `/hoa-don` để xem hóa đơn có sẵn và thử xuất PDF
 
-### Cach 2: Demo luong nghiep vu tu dau
+### Cách 2: Demo luồng nghiệp vụ từ đầu
 
-1. Tao phong moi tai `/phong`
-2. Tao khach moi tai `/khach-thue`
-3. Tao hop dong tai `/hop-dong`
-4. Tao hoac kiem tra bang gia thang hien tai tai `/bang-gia`
-5. Vao `/thanh-toan`, bam `Tao thang moi`, nhap dien/nuoc va toggle trang thai thanh toan
-6. Vao `/hoa-don`, tinh hoa don va mo chi tiet/PDF
-7. Quay lai `/dashboard` de xem KPI va doanh thu thay doi
+1. Tạo phòng mới tại `/phong`
+2. Tạo khách mới tại `/khach-thue`
+3. Tạo hợp đồng tại `/hop-dong`
+4. Tạo hoặc kiểm tra bảng giá tháng hiện tại tại `/bang-gia`
+5. Vào `/thanh-toan`, bấm `Tạo tháng mới`, nhập điện/nước và toggle trạng thái thanh toán
+6. Vào `/hoa-don`, tính hóa đơn và mở chi tiết/PDF
+7. Quay lại `/dashboard` để xem KPI và doanh thu thay đổi
 
-## Du lieu mau
+## Dữ liệu mẫu
 
-Seed hien tai tao san:
+Seed hiện tại tạo sẵn:
 
-- Phong `101`, `102`, `103`, `104`, `201`
-- Khach: `Nguyen Van An`, `Tran Thi Binh`, `Le Van Cuong`
-- 2 hop dong demo, trong do co 1 hop dong sap het han
-- Bang gia thang hien tai da khoa
-- 2 ban ghi thanh toan, 1 da thanh toan va 1 chua thanh toan
-- 1 hoa don mau
+- Phòng `101`, `102`, `103`, `104`, `201`
+- Khách: `Nguyễn Văn An`, `Trần Thị Bình`, `Lê Văn Cường`
+- 2 hợp đồng demo, trong đó có 1 hợp đồng sắp hết hạn
+- Bảng giá tháng hiện tại đã khóa
+- 2 bản ghi thanh toán, 1 đã thanh toán và 1 chưa thanh toán
+- 1 hóa đơn mẫu
 
-## Known limitations nho
+## Known limitations nhỏ
 
-- `seed.py` reset lai database hien tai bang `drop_all()` + `create_all()`
-- Mobile view cua bang `thanh-toan` va `hoa-don` van dua vao scroll ngang de xem du cot
-- PDF HTML dep phu thuoc WeasyPrint va native libs tren may chay; neu thieu, app se tra fallback PDF toi thieu
-- Chua co page rieng cho form Phong va detail Hoa don vi UI hien tai uu tien modal de phuc vu demo nhanh
+- `seed.py` reset lại database hiện tại bằng `drop_all()` + `create_all()`
+- Mobile view của bảng `thanh-toan` và `hoa-don` vẫn dựa vào scroll ngang để xem đủ cột
+- PDF HTML đẹp phụ thuộc WeasyPrint và native libs trên máy chạy; nếu thiếu, app sẽ trả fallback PDF tối thiểu
+- Chưa có page riêng cho form Phòng và detail Hóa đơn vì UI hiện tại ưu tiên modal để phục vụ demo nhanh
 
-## Lenh huu ich cho handoff
+## Lệnh hữu ích cho handoff
 
 ```powershell
 .\venv\Scripts\python.exe -m pip install -r requirements.txt

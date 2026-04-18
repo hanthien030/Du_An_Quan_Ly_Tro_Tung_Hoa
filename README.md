@@ -1,30 +1,30 @@
-# He Thong Quan Ly Day Tro Binh Dan
+# Hệ Thống Quản Lý Dãy Trọ Bình Dân
 
-Ung dung web Flask quan ly day tro quy mo nho, phuc vu demo va handoff cho bai toan quan ly phong, khach thue, hop dong, thanh toan thang, hoa don va thong ke doanh thu.
+Ứng dụng web Flask quản lý dãy trọ quy mô nhỏ, phục vụ demo và handoff cho bài toán quản lý phòng, khách thuê, hợp đồng, thanh toán tháng, hóa đơn và thống kê doanh thu.
 
-## Trang thai hien tai
+## Trạng thái hiện tại
 
-Phase 0, Phase 1 va Phase 3 da hoan tat theo `PLAN.md`.
+Phase 0, Phase 1 và Phase 3 đã hoàn tất theo `PLAN.md`.
 
-Phase 2 da hoan thanh phan lon giao dien va da duoc verify o muc demo thuc te. Ba muc checklist frontend van de `[ ]` la:
+Phase 2 đã hoàn thành phần lớn giao diện và đã được verify ở mức demo thực tế. Ba mục checklist frontend vẫn để `[ ]` là:
 
 - `phong/form.html`
 - `hoa_don/detail.html`
 - `pdf/hoa_don_pdf.html`
 
-Ly do cu the duoc ghi trong [HANDOFF_NOTES.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/HANDOFF_NOTES.md:1). README nay khong over-claim ba muc do la da dong.
+Lý do cụ thể được ghi trong [HANDOFF_NOTES.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/HANDOFF_NOTES.md:1). README này không over-claim ba mục đó là đã đóng.
 
-## Stack cong nghe
+## Stack công nghệ
 
 - Backend: Python 3.10+ / Flask 3
 - ORM: Flask-SQLAlchemy / SQLAlchemy 2
 - Migration: Flask-Migrate
-- Database: SQLite mac dinh, co the doi qua `DATABASE_URL`
+- Database: SQLite mặc định, có thể đổi qua `DATABASE_URL`
 - Frontend: Jinja2 templates + Bootstrap 5 + Vanilla JS
-- PDF: WeasyPrint, co fallback PDF toi thieu neu render HTML -> PDF khong kha dung
+- PDF: WeasyPrint, có fallback PDF tối thiểu nếu render HTML -> PDF không khả dụng
 - Test: pytest
 
-## Cau truc thu muc chinh
+## Cấu trúc thư mục chính
 
 ```text
 app/
@@ -32,110 +32,110 @@ app/
   models.py            SQLAlchemy models
   api/                 REST API blueprints
   services/            Business logic (invoice, warning, pdf)
-  templates/           Jinja templates cho cac man hinh
+  templates/           Jinja templates cho các màn hình
 static/
-  css/style.css        CSS giao dien
-  js/                  JS cho dashboard, phong, thanh_toan, thong_ke
+  css/style.css        CSS giao diện
+  js/                  JS cho dashboard, phòng, thanh_toan, thong_ke
 tests/                 Pytest suite
-seed.py                Tao du lieu demo
-run.py                 Entry point chay Flask app
-PLAN.md                Checklist va mo ta du an
-HANDOFF_NOTES.md       Ghi chu handoff/demo cuoi
+seed.py                Tạo dữ liệu demo
+run.py                 Entry point chạy Flask app
+PLAN.md                Checklist và mô tả dự án
+HANDOFF_NOTES.md       Ghi chú handoff/demo cuối
 ```
 
-## Cai dat moi truong
+## Cài đặt môi trường
 
-### 1. Tao virtualenv
+### 1. Tạo virtualenv
 
 ```powershell
 python -m venv venv
 ```
 
-### 2. Kich hoat virtualenv
+### 2. Kích hoạt virtualenv
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-Neu PowerShell chan script, co the dung:
+Nếu PowerShell chặn script, có thể dùng:
 
 ```powershell
 .\venv\Scripts\python.exe --version
 ```
 
-va goi truc tiep Python trong `venv` cho cac lenh ben duoi.
+và gọi trực tiếp Python trong `venv` cho các lệnh bên dưới.
 
-### 3. Cai dependencies
+### 3. Cài dependencies
 
 ```powershell
 .\venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
-## Cau hinh va database
+## Cấu hình và database
 
-Mac dinh app dung SQLite file `nha_tro.db` tai root repo.
+Mặc định app dùng SQLite file `nha_tro.db` tại root repo.
 
-Co the override bang bien moi truong:
+Có thể override bằng biến môi trường:
 
 ```powershell
 $env:DATABASE_URL = "sqlite:///custom.db"
 ```
 
-Neu muon khoi tao schema rong qua Flask-Migrate:
+Nếu muốn khởi tạo schema rỗng qua Flask-Migrate:
 
 ```powershell
 .\venv\Scripts\python.exe -m flask db upgrade
 ```
 
-Trong demo thong thuong, chi can chay seed la du vi `seed.py` se `drop_all()` + `create_all()` truoc khi nap du lieu mau.
+Trong demo thông thường, chỉ cần chạy seed là đủ vì `seed.py` sẽ `drop_all()` + `create_all()` trước khi nạp dữ liệu mẫu.
 
-## Seed du lieu demo
+## Seed dữ liệu demo
 
 ```powershell
 .\venv\Scripts\python.exe seed.py
 ```
 
-Script seed hien tao:
+Script seed hiện tạo:
 
-- 5 phong
-- 3 khach thue
-- 2 hop dong
-- 1 bang gia thang hien tai
-- 2 ban ghi thanh toan thang
-- 1 hoa don mau
+- 5 phòng
+- 3 khách thuê
+- 2 hợp đồng
+- 1 bảng giá tháng hiện tại
+- 2 bản ghi thanh toán tháng
+- 1 hóa đơn mẫu
 
-Seed se reset lai DB hien tai, vi vay khong nen chay tren du lieu can giu.
+Seed sẽ reset lại DB hiện tại, vì vậy không nên chạy trên dữ liệu cần giữ.
 
-## Chay app
+## Chạy app
 
-Co hai cach don gian:
+Có hai cách đơn giản:
 
 ```powershell
 .\venv\Scripts\python.exe run.py
 ```
 
-Hoac:
+Hoặc:
 
 ```powershell
 $env:FLASK_APP = "run.py"
 .\venv\Scripts\python.exe -m flask run
 ```
 
-App mac dinh chay tai `http://127.0.0.1:5000`.
+App mặc định chạy tại `http://127.0.0.1:5000`.
 
-## Chay test
+## Chạy test
 
 ```powershell
 .\venv\Scripts\python.exe -m pytest -q
 ```
 
-Trang thai suite tai luc handoff: `28 passed`.
+Trạng thái suite tại lúc handoff: `28 passed`.
 
-## Cac URL chinh
+## Các URL chính
 
 Page routes:
 
-- `/` hoac `/dashboard`
+- `/` hoặc `/dashboard`
 - `/phong`
 - `/khach-thue`
 - `/hop-dong`
@@ -157,38 +157,38 @@ API routes:
 
 ## Core flow demo
 
-Neu muon demo nhanh bang du lieu seed:
+Nếu muốn demo nhanh bằng dữ liệu seed:
 
-1. Chay `seed.py`
-2. Mo `/dashboard` de xem KPI, canh bao va doanh thu
-3. Mo `/phong` de xem tinh trang tung phong
-4. Mo `/hop-dong` de xem hop dong hieu luc / sap het han
-5. Mo `/thanh-toan` de xem du lieu thanh toan thang hien tai
-6. Mo `/hoa-don` de xem hoa don da co san va thu xuat PDF
+1. Chạy `seed.py`
+2. Mở `/dashboard` để xem KPI, cảnh báo và doanh thu
+3. Mở `/phong` để xem tình trạng từng phòng
+4. Mở `/hop-dong` để xem hợp đồng hiệu lực / sắp hết hạn
+5. Mở `/thanh-toan` để xem dữ liệu thanh toán tháng hiện tại
+6. Mở `/hoa-don` để xem hóa đơn đã có sẵn và thử xuất PDF
 
-Neu muon demo luong nghiep vu tay trong 5 phut:
+Nếu muốn demo luồng nghiệp vụ tay trong 5 phút:
 
-1. Vao `/phong` va tao phong moi
-2. Vao `/khach-thue` va tao khach moi
-3. Vao `/hop-dong` va tao hop dong cho phong vua tao
-4. Vao `/bang-gia` dam bao thang hien tai co bang gia
-5. Vao `/thanh-toan`, bam `Tao thang moi`, nhap so dien/nuoc va danh dau da thanh toan neu can
-6. Vao `/hoa-don`, bam `Tinh tat ca hoa don` hoac generate theo flow da co
-7. Quay lai `/dashboard` de xac nhan KPI va doanh thu cap nhat
+1. Vào `/phong` và tạo phòng mới
+2. Vào `/khach-thue` và tạo khách mới
+3. Vào `/hop-dong` và tạo hợp đồng cho phòng vừa tạo
+4. Vào `/bang-gia` đảm bảo tháng hiện tại có bảng giá
+5. Vào `/thanh-toan`, bấm `Tạo tháng mới`, nhập số điện/nước và đánh dấu đã thanh toán nếu cần
+6. Vào `/hoa-don`, bấm `Tính tất cả hóa đơn` hoặc generate theo flow đã có
+7. Quay lại `/dashboard` để xác nhận KPI và doanh thu cập nhật
 
-## Luu y ve PDF / WeasyPrint
+## Lưu ý về PDF / WeasyPrint
 
-App uu tien render hoa don PDF bang template HTML `app/templates/pdf/hoa_don_pdf.html` thong qua WeasyPrint.
+App ưu tiên render hóa đơn PDF bằng template HTML `app/templates/pdf/hoa_don_pdf.html` thông qua WeasyPrint.
 
-Trong mot so may Windows, WeasyPrint co the can them native libraries hoac environment phu tro. Neu WeasyPrint khong khoi tao duoc, `pdf_service.py` se fallback sang mot PDF toi thieu sinh truc tiep bang bytes de:
+Trong một số máy Windows, WeasyPrint có thể cần thêm native libraries hoặc environment phụ trợ. Nếu WeasyPrint không khởi tạo được, `pdf_service.py` sẽ fallback sang một PDF tối thiểu sinh trực tiếp bằng bytes để:
 
-- endpoint PDF van tra `application/pdf`
-- luong demo khong bi block
-- nguoi nhan van co mot file PDF co noi dung co ban
+- endpoint PDF vẫn trả `application/pdf`
+- luồng demo không bị block
+- người nhận vẫn có một file PDF có nội dung cơ bản
 
-Neu muon su dung HTML PDF day du, hay kiem tra cai dat WeasyPrint va cac thu vien native lien quan tren may demo.
+Nếu muốn sử dụng HTML PDF đầy đủ, hãy kiểm tra cài đặt WeasyPrint và các thư viện native liên quan trên máy demo.
 
-## Tai lieu handoff them
+## Tài liệu handoff thêm
 
-- [PLAN.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/PLAN.md:1): source of truth ve checklist va pham vi du an
-- [HANDOFF_NOTES.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/HANDOFF_NOTES.md:1): tom tat tinh trang handoff/demo cuoi, cac muc con treo va known limitations
+- [PLAN.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/PLAN.md:1): source of truth về checklist và phạm vi dự án
+- [HANDOFF_NOTES.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/HANDOFF_NOTES.md:1): tóm tắt tình trạng handoff/demo cuối, các mục còn treo và known limitations
