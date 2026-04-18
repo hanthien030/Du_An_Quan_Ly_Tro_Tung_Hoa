@@ -12,7 +12,7 @@ Phase 2 đã hoàn thành phần lớn giao diện và đã được verify ở 
 - `hoa_don/detail.html`
 - `pdf/hoa_don_pdf.html`
 
-Lý do cụ thể được ghi trong [HANDOFF_NOTES.md](/https://github.com/hanthien030/Du_An_Quan_Ly_Tro_Tung_Hoa/blob/main/HANDOFF_NOTES.md:1). README này không over-claim ba mục đó là đã đóng.
+Lý do cụ thể được ghi trong [HANDOFF_NOTES.md](/main/HANDOFF_NOTES.md). README này không over-claim ba mục đó là đã đóng.
 
 ## Stack công nghệ
 
