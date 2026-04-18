@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Bảng Giá{% endblock %}
+{% block page_title %}Bảng Giá{% endblock %}
+
+{% block content %}
+<!-- Bộ chọn tháng/năm -->
+<div class="card p-3 mb-3">
+  <div class="d-flex flex-wrap gap-2 align-items-center">
+    <label class="form-label mb-0">Tháng:</label>
+    <select class="form-select form-select-sm w-auto" id="sel-thang"></select>
+    <label class="form-label mb-0">Năm:</label>
+    <select class="form-select form-select-sm w-auto" id="sel-nam"></select>
+    <button class="btn btn-sm btn-outline-secondary" onclick="loadBG()">Xem</button>
+    <button class="btn btn-sm btn-outline-primary" onclick="copyFromPrev()">
+      <i class="bi bi-copy me-1"></i>Sao chép từ tháng trước
+    </button>
+  </div>
+</div>
+
+<!-- Form bảng giá -->
+<div class="card p-4" id="bg-card">
+  <div id="bg-status" class="mb-3"></div>
+  <div id="bg-form">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Giá phòng Cấp 1 (đ)</label>
+        <input type="number" class="form-control" id="f-cap1" min="0">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Giá phòng Cấp 2 (đ)</label>
+        <input type="number" class="form-control" id="f-cap2" min="0">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Đơn giá điện (đ/kWh)</label>
+        <input type="number" class="form-control" id="f-dien" min="0">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Đơn giá nước (đ/m³)</label>
+        <input type="number" class="form-control" id="f-nuoc" min="0">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Phí Wifi (đ)</label>
+        <input type="number" class="form-control" id="f-wifi" min="0" value="0">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Phí Vệ sinh (đ)</label>
+        <input type="number" class="form-control" id="f-vs" min="0" value="0">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Phí Gửi xe (đ)</label>
+        <input type="number" class="form-control" id="f-xe" min="0" value="0">
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-primary" id="btn-save" onclick="saveBG()">
+        <i class="bi bi-save me-1"></i>Lưu Bảng Giá
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let currentBG = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  fillMonthYearSelects('sel-thang', 'sel-nam');
+  loadBG();
+});
+
+async function loadBG() {
+  const thang = document.getElementById('sel-thang').value;
+  const nam   = document.getElementById('sel-nam').value;
+  try {
+    const { data } = await fetchAPI(`/api/bang-gia/${thang}/${nam}`);
+    currentBG = data;
+    const statusEl = document.getElementById('bg-status');
+    const inputs = document.querySelectorAll('#bg-form input');
+    const btn = document.getElementById('btn-save');
+
+    if (!data) {
+      statusEl.innerHTML = `<div class="alert alert-info mb-0">Chưa có bảng giá tháng ${thang}/${nam}. Nhập mới bên dưới.</div>`;
+      ['f-cap1','f-cap2','f-dien','f-nuoc','f-wifi','f-vs','f-xe'].forEach(id => document.getElementById(id).value = '');
+      inputs.forEach(i => i.disabled = false);
+      btn.disabled = false;
+      return;
+    }
+
+    document.getElementById('f-cap1').value = data.gia_phong_cap1;
+    document.getElementById('f-cap2').value = data.gia_phong_cap2;
+    document.getElementById('f-dien').value = data.don_gia_dien;
+    document.getElementById('f-nuoc').value = data.don_gia_nuoc;
+    document.getElementById('f-wifi').value = data.phi_wifi;
+    document.getElementById('f-vs').value   = data.phi_ve_sinh;
+    document.getElementById('f-xe').value   = data.phi_gui_xe;
+
+    if (data.is_locked) {
+      statusEl.innerHTML = `<div class="alert alert-warning mb-0"><i class="bi bi-lock-fill me-1"></i>Bảng giá đã khóa (đã có hóa đơn). Không thể chỉnh sửa.</div>`;
+      inputs.forEach(i => i.disabled = true);
+      btn.disabled = true;
+    } else {
+      statusEl.innerHTML = `<div class="alert alert-success mb-0"><i class="bi bi-unlock me-1"></i>Bảng giá tháng ${thang}/${nam} — có thể chỉnh sửa.</div>`;
+      inputs.forEach(i => i.disabled = false);
+      btn.disabled = false;
+    }
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function saveBG() {
+  const thang = parseInt(document.getElementById('sel-thang').value);
+  const nam   = parseInt(document.getElementById('sel-nam').value);
+  const body = {
+    thang, nam,
+    gia_phong_cap1: parseFloat(document.getElementById('f-cap1').value),
+    gia_phong_cap2: parseFloat(document.getElementById('f-cap2').value),
+    don_gia_dien:   parseFloat(document.getElementById('f-dien').value),
+    don_gia_nuoc:   parseFloat(document.getElementById('f-nuoc').value),
+    phi_wifi:       parseFloat(document.getElementById('f-wifi').value) || 0,
+    phi_ve_sinh:    parseFloat(document.getElementById('f-vs').value) || 0,
+    phi_gui_xe:     parseFloat(document.getElementById('f-xe').value) || 0,
+  };
+  if (isNaN(body.gia_phong_cap1) || isNaN(body.don_gia_dien)) {
+    showToast('Vui lòng nhập đầy đủ thông tin giá', 'warning'); return;
+  }
+  try {
+    if (currentBG) {
+      await fetchAPI(`/api/bang-gia/${currentBG.bangia_id}`, 'PUT', body);
+    } else {
+      await fetchAPI('/api/bang-gia', 'POST', body);
+    }
+    showToast('Đã lưu bảng giá');
+    loadBG();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function copyFromPrev() {
+  const toThang = parseInt(document.getElementById('sel-thang').value);
+  const toNam   = parseInt(document.getElementById('sel-nam').value);
+  let fromThang = toThang - 1, fromNam = toNam;
+  if (fromThang === 0) { fromThang = 12; fromNam -= 1; }
+  if (!confirm(`Sao chép bảng giá từ ${fromThang}/${fromNam} sang ${toThang}/${toNam}?`)) return;
+  try {
+    await fetchAPI('/api/bang-gia/copy', 'POST', {
+      from_thang: fromThang, from_nam: fromNam,
+      to_thang: toThang, to_nam: toNam,
+    });
+    showToast('Đã sao chép bảng giá');
+    loadBG();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+</script>
+{% endblock %}

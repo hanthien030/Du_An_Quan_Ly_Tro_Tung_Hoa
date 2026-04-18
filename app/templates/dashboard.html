@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- KPI Row -->
+<div class="row g-3 mb-3" id="kpi-row">
+  <div class="col-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="kpi-icon" style="background:#eff6ff"><i class="bi bi-door-open text-primary fs-4"></i></div>
+        <div>
+          <div class="text-muted small">Tổng phòng</div>
+          <div class="fw-bold fs-4" id="kpi-tong-phong">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="kpi-icon" style="background:#f0fdf4"><i class="bi bi-person-check text-success fs-4"></i></div>
+        <div>
+          <div class="text-muted small">Đang thuê</div>
+          <div class="fw-bold fs-4" id="kpi-dang-thue">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="kpi-icon" style="background:#f8fafc"><i class="bi bi-door-closed text-secondary fs-4"></i></div>
+        <div>
+          <div class="text-muted small">Phòng trống</div>
+          <div class="fw-bold fs-4" id="kpi-phong-trong">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card kpi-card p-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="kpi-icon" style="background:#fefce8"><i class="bi bi-cash-coin text-warning fs-4"></i></div>
+        <div>
+          <div class="text-muted small">Doanh thu tháng</div>
+          <div class="fw-bold fs-5" id="kpi-doanh-thu">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Alert Row -->
+<div class="row g-3 mb-3">
+  <div class="col-md-6">
+    <a href="/thanh-toan" class="text-decoration-none">
+      <div class="card p-3 border-start border-danger border-4 kpi-card" id="alert-chua-dong">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-exclamation-triangle-fill text-danger fs-5"></i>
+          <span class="fw-semibold" id="txt-chua-dong">Đang tải...</span>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="col-md-6">
+    <a href="/hop-dong?trang_thai=sap_het_han" class="text-decoration-none">
+      <div class="card p-3 border-start border-warning border-4 kpi-card" id="alert-sap-het">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-bell-fill text-warning fs-5"></i>
+          <span class="fw-semibold" id="txt-sap-het">Đang tải...</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- Chart -->
+<div class="card p-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h6 class="mb-0 section-title">Doanh thu 6 tháng gần nhất</h6>
+  </div>
+  <canvas id="chart-doanh-thu" height="80"></canvas>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,204 @@
+/* ============================================================
+   Nhà Trọ Manager — Custom Styles (Bootstrap 5.3 override)
+   ============================================================ */
+
+:root {
+  --sidebar-width: 230px;
+  --sidebar-bg: #1e2a3a;
+  --sidebar-active: #3b82f6;
+  --sidebar-hover: rgba(255,255,255,.08);
+  --topbar-height: 56px;
+}
+
+/* ---- Layout ---- */
+body {
+  background: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+#sidebar {
+  width: var(--sidebar-width);
+  min-height: 100vh;
+  background: var(--sidebar-bg);
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 1030;
+  transition: transform .25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+#sidebar .sidebar-brand {
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 1.2rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  text-decoration: none;
+}
+
+#sidebar .sidebar-brand span {
+  font-size: 1.4rem;
+  margin-right: .5rem;
+}
+
+#sidebar .nav-link {
+  color: rgba(255,255,255,.75);
+  padding: .55rem 1.2rem;
+  border-radius: 6px;
+  margin: 2px 8px;
+  font-size: .92rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  transition: background .15s, color .15s;
+  text-decoration: none;
+}
+
+#sidebar .nav-link:hover {
+  background: var(--sidebar-hover);
+  color: #fff;
+}
+
+#sidebar .nav-link.active {
+  background: var(--sidebar-active);
+  color: #fff;
+}
+
+#sidebar .nav-link .bi {
+  font-size: 1rem;
+  width: 1.1rem;
+  text-align: center;
+}
+
+/* ---- Main wrapper ---- */
+#main-wrapper {
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#topbar {
+  height: var(--topbar-height);
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+#topbar .page-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1e2a3a;
+}
+
+#page-content {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+/* ---- KPI Cards ---- */
+.kpi-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+.kpi-card .kpi-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* ---- Room Grid ---- */
+.room-card {
+  border-radius: 10px;
+  border: 2px solid #e2e8f0;
+  cursor: pointer;
+  transition: box-shadow .15s, transform .1s;
+  background: #fff;
+}
+
+.room-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.1);
+  transform: translateY(-2px);
+}
+
+.room-card.status-dang_thue { border-color: #22c55e; }
+.room-card.status-trong      { border-color: #94a3b8; }
+.room-card.status-sua_chua   { border-color: #ef4444; }
+
+.room-card .room-badge {
+  font-size: .72rem;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+
+/* ---- Badge trạng thái ---- */
+.badge-hieu_luc   { background: #dcfce7; color: #166534; }
+.badge-sap_het_han{ background: #fef9c3; color: #854d0e; }
+.badge-het_han    { background: #fee2e2; color: #991b1b; }
+.badge-chua_tt    { background: #fee2e2; color: #991b1b; }
+.badge-da_tt      { background: #dcfce7; color: #166534; }
+
+/* ---- Table ---- */
+.table-hover tbody tr:hover { background: #f8fafc; }
+.table th { font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; color: #64748b; }
+
+/* ---- Inline number input ---- */
+.inline-num {
+  border: 1px solid transparent;
+  background: transparent;
+  width: 80px;
+  text-align: right;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: .9rem;
+}
+.inline-num:focus {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  outline: none;
+}
+
+/* ---- Toast ---- */
+#toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 9999;
+}
+
+/* ---- Responsive: hide sidebar on mobile ---- */
+@media (max-width: 768px) {
+  #sidebar {
+    transform: translateX(calc(-1 * var(--sidebar-width)));
+  }
+  #sidebar.show {
+    transform: translateX(0);
+  }
+  #main-wrapper {
+    margin-left: 0;
+  }
+}
+
+/* ---- Misc ---- */
+.cursor-pointer { cursor: pointer; }
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e2a3a;
+  margin-bottom: 1rem;
+}
+.card { border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,.06); }

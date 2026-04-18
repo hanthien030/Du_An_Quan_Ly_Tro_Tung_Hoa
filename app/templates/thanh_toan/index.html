@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Thanh Toán Tháng{% endblock %}
+{% block page_title %}Thanh Toán Hàng Tháng{% endblock %}
+
+{% block content %}
+<!-- Toolbar -->
+<div class="card p-3 mb-3">
+  <div class="d-flex flex-wrap gap-2 align-items-center">
+    <select class="form-select form-select-sm w-auto" id="sel-thang"></select>
+    <select class="form-select form-select-sm w-auto" id="sel-nam"></select>
+    <button class="btn btn-sm btn-outline-secondary" onclick="loadTT()">
+      <i class="bi bi-arrow-clockwise me-1"></i>Tải danh sách
+    </button>
+    <button class="btn btn-sm btn-primary" onclick="taoThang()">
+      <i class="bi bi-plus-circle me-1"></i>Tạo tháng mới
+    </button>
+    <div class="ms-auto text-muted small" id="bg-info"></div>
+  </div>
+</div>
+
+<!-- Bảng -->
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle" id="tt-table">
+      <thead class="table-light">
+        <tr>
+          <th>Phòng</th>
+          <th>Khách thuê</th>
+          <th class="text-end">Số điện (kWh)</th>
+          <th class="text-end">Số nước (m³)</th>
+          <th class="text-end">Tổng tạm tính</th>
+          <th class="text-center">Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody id="tt-tbody"></tbody>
+      <tfoot>
+        <tr class="table-secondary fw-semibold">
+          <td colspan="4" class="text-end">Tổng thu:</td>
+          <td class="text-end" id="tfoot-tong">—</td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/thanh_toan.js') }}"></script>
+{% endblock %}

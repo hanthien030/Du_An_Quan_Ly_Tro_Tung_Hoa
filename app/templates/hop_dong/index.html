@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}Hợp Đồng{% endblock %}
+{% block page_title %}Quản Lý Hợp Đồng{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+  <button class="btn btn-primary btn-sm" onclick="openCreateModal()">
+    <i class="bi bi-file-earmark-plus me-1"></i>Tạo Hợp Đồng
+  </button>
+  <select id="filter-tt" class="form-select form-select-sm w-auto" onchange="loadHD()">
+    <option value="">Tất cả</option>
+    <option value="hieu_luc">Hiệu lực</option>
+    <option value="sap_het_han">Sắp hết hạn</option>
+    <option value="het_han">Hết hạn</option>
+  </select>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Phòng</th><th>Khách thuê</th><th>Bắt đầu</th>
+          <th>Kết thúc</th><th>Còn lại</th><th>Trạng thái</th><th class="text-end">Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="hd-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal tạo HĐ -->
+<div class="modal fade" id="createModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Tạo Hợp Đồng</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Phòng (chỉ hiện phòng trống) <span class="text-danger">*</span></label>
+          <select class="form-select" id="f-phong_id"></select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Khách thuê <span class="text-danger">*</span></label>
+          <select class="form-select" id="f-khach_id"></select>
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col">
+            <label class="form-label">Ngày bắt đầu <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="f-ngay_bd">
+          </div>
+          <div class="col">
+            <label class="form-label">Ngày kết thúc</label>
+            <input type="date" class="form-control" id="f-ngay_kt">
+          </div>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Ghi chú</label>
+          <textarea class="form-control" id="f-ghi_chu" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Hủy</button>
+        <button class="btn btn-primary btn-sm" onclick="createHD()">Tạo hợp đồng</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal gia hạn -->
+<div class="modal fade" id="giaHanModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gh-title">Gia Hạn Hợp Đồng</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="gh-id">
+        <label class="form-label">Ngày kết thúc mới</label>
+        <input type="date" class="form-control" id="gh-ngay_kt">
+        <div class="mt-2">
+          <label class="form-label">Ghi chú</label>
+          <input type="text" class="form-control" id="gh-ghi_chu">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Hủy</button>
+        <button class="btn btn-success btn-sm" onclick="giaHan()">Gia hạn</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let createModal, giaHanModal;
+document.addEventListener('DOMContentLoaded', () => {
+  createModal = new bootstrap.Modal(document.getElementById('createModal'));
+  giaHanModal = new bootstrap.Modal(document.getElementById('giaHanModal'));
+
+  // Set default date
+  document.getElementById('f-ngay_bd').value = new Date().toISOString().split('T')[0];
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('trang_thai')) document.getElementById('filter-tt').value = params.get('trang_thai');
+  loadHD();
+});
+
+async function loadHD() {
+  const tt = document.getElementById('filter-tt').value;
+  const url = tt ? `/api/hop-dong?trang_thai=${tt}` : '/api/hop-dong';
+  try {
+    const { data } = await fetchAPI(url);
+    const tbody = document.getElementById('hd-tbody');
+    if (!data.length) { tbody.innerHTML = '<tr><td colspan="7" class="text-muted text-center py-3">Không có dữ liệu</td></tr>'; return; }
+    tbody.innerHTML = data.map(h => {
+      const badgeClass = { hieu_luc: 'badge-hieu_luc', sap_het_han: 'badge-sap_het_han', het_han: 'badge-het_han' }[h.trang_thai] || '';
+      const label = { hieu_luc: 'Hiệu lực', sap_het_han: 'Sắp HH', het_han: 'Hết hạn' }[h.trang_thai] || h.trang_thai;
+      const days = h.days_remaining != null ? `${h.days_remaining} ngày` : '—';
+      const actions = h.trang_thai !== 'het_han' ? `
+        <button class="btn btn-sm btn-outline-success" onclick="openGiaHan(${h.hopdong_id}, '${h.ngay_ket_thuc || ''}')"><i class="bi bi-calendar-plus"></i></button>
+        <button class="btn btn-sm btn-outline-danger ms-1" onclick="ketThucSom(${h.hopdong_id})"><i class="bi bi-x-circle"></i></button>` : '';
+      return `<tr>
+        <td><strong>${h.so_phong}</strong></td>
+        <td>${h.ho_ten}</td>
+        <td>${formatDate(h.ngay_bat_dau)}</td>
+        <td>${formatDate(h.ngay_ket_thuc)}</td>
+        <td class="${h.days_remaining != null && h.days_remaining <= 30 ? 'text-danger fw-semibold' : ''}">${days}</td>
+        <td><span class="badge ${badgeClass}">${label}</span></td>
+        <td class="text-end">${actions}</td>
+      </tr>`;
+    }).join('');
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function openCreateModal() {
+  try {
+    const [{ data: phongs }, { data: khachs }] = await Promise.all([
+      fetchAPI('/api/phong?trang_thai=trong'),
+      fetchAPI('/api/khach-thue'),
+    ]);
+    if (!phongs.length) {
+      showToast('Không còn phòng trống để tạo hợp đồng', 'warning');
+      return;
+    }
+    if (!khachs.length) {
+      showToast('Chưa có khách thuê để tạo hợp đồng', 'warning');
+      return;
+    }
+    document.getElementById('f-phong_id').innerHTML = phongs.map(p => `<option value="${p.phong_id}">Phòng ${p.so_phong} (${p.cap_phong})</option>`).join('') || '<option disabled>Không có phòng trống</option>';
+    document.getElementById('f-khach_id').innerHTML = khachs.map(k => `<option value="${k.khach_id}">${k.ho_ten}${k.sdt ? ' — ' + k.sdt : ''}</option>`).join('');
+    createModal.show();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function createHD() {
+  const body = {
+    phong_id:      parseInt(document.getElementById('f-phong_id').value),
+    khach_id:      parseInt(document.getElementById('f-khach_id').value),
+    ngay_bat_dau:  document.getElementById('f-ngay_bd').value,
+    ngay_ket_thuc: document.getElementById('f-ngay_kt').value || null,
+    ghi_chu:       document.getElementById('f-ghi_chu').value.trim() || null,
+  };
+  if (!body.phong_id || !body.khach_id || !body.ngay_bat_dau) {
+    showToast('Vui lòng chọn đủ phòng, khách và ngày bắt đầu', 'warning');
+    return;
+  }
+  try {
+    await fetchAPI('/api/hop-dong', 'POST', body);
+    showToast('Đã tạo hợp đồng');
+    createModal.hide();
+    loadHD();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+function openGiaHan(id, ngayKT) {
+  document.getElementById('gh-id').value = id;
+  document.getElementById('gh-ngay_kt').value = ngayKT;
+  giaHanModal.show();
+}
+
+async function giaHan() {
+  const id = document.getElementById('gh-id').value;
+  const body = {
+    ngay_ket_thuc: document.getElementById('gh-ngay_kt').value || null,
+    ghi_chu: document.getElementById('gh-ghi_chu').value.trim() || null,
+  };
+  try {
+    await fetchAPI(`/api/hop-dong/${id}`, 'PUT', body);
+    showToast('Đã gia hạn hợp đồng');
+    giaHanModal.hide();
+    loadHD();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function ketThucSom(id) {
+  if (!confirm('Kết thúc sớm hợp đồng này? Phòng sẽ được đặt lại trạng thái Trống.')) return;
+  try {
+    await fetchAPI(`/api/hop-dong/${id}`, 'PUT', { ket_thuc_som: true });
+    showToast('Đã kết thúc hợp đồng');
+    loadHD();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Local environment/config
+.env
+.env.*
+instance/
+
+# Databases and local runtime data
+*.db
+*.sqlite
+*.sqlite3
+
+# Pytest/runtime artifacts
+.pytest_cache/
+.pytest_tmp/
+tests/.runtime/
+pytest-cache-files-*/
+tests/pytest-cache-files-*/
+*.log
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

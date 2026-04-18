@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Hóa Đơn{% endblock %}
+{% block page_title %}Hóa Đơn Tháng{% endblock %}
+
+{% block content %}
+<!-- Toolbar -->
+<div class="card p-3 mb-3">
+  <div class="d-flex flex-wrap gap-2 align-items-center">
+    <select class="form-select form-select-sm w-auto" id="sel-thang"></select>
+    <select class="form-select form-select-sm w-auto" id="sel-nam"></select>
+    <button class="btn btn-sm btn-outline-secondary" onclick="loadHD()">
+      <i class="bi bi-arrow-clockwise me-1"></i>Xem
+    </button>
+    <button class="btn btn-sm btn-primary" onclick="generateAll()">
+      <i class="bi bi-lightning-charge me-1"></i>Tính tất cả hóa đơn
+    </button>
+  </div>
+</div>
+
+<!-- Table -->
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Phòng</th><th>Khách</th>
+          <th class="text-end">Tiền phòng</th>
+          <th class="text-end">Điện</th>
+          <th class="text-end">Nước</th>
+          <th class="text-end">Dịch vụ</th>
+          <th class="text-end">Tổng</th>
+          <th class="text-center">Trạng thái</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="hd-tbody"></tbody>
+      <tfoot>
+        <tr class="table-secondary fw-semibold">
+          <td colspan="6" class="text-end">Tổng doanh thu:</td>
+          <td class="text-end" id="tfoot-tong">—</td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- Modal chi tiết -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="detail-title">Hóa Đơn</h5>
+        <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="detail-body"></div>
+      <div class="modal-footer">
+        <a id="btn-pdf" class="btn btn-danger btn-sm" target="_blank">
+          <i class="bi bi-file-pdf me-1"></i>Xuất PDF
+        </a>
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+let detailModal;
+document.addEventListener('DOMContentLoaded', () => {
+  detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+  fillMonthYearSelects('sel-thang', 'sel-nam');
+  loadHD();
+});
+
+async function loadHD() {
+  const thang = document.getElementById('sel-thang').value;
+  const nam   = document.getElementById('sel-nam').value;
+  try {
+    const { data } = await fetchAPI(`/api/hoa-don/${thang}/${nam}`);
+    const tbody = document.getElementById('hd-tbody');
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="text-muted text-center py-3">Chưa có hóa đơn. Bấm "Tính tất cả hóa đơn".</td></tr>';
+      document.getElementById('tfoot-tong').textContent = formatVND(0);
+      return;
+    }
+    let tong = 0;
+    tbody.innerHTML = data.map(h => {
+      tong += h.tong_tien;
+      const isDone = h.trang_thai === 'da_tt';
+      return `<tr>
+        <td><strong>${h.so_phong}</strong></td>
+        <td>${h.ho_ten}</td>
+        <td class="text-end">${formatVND(h.tien_phong)}</td>
+        <td class="text-end">${formatVND(h.tien_dien)}</td>
+        <td class="text-end">${formatVND(h.tien_nuoc)}</td>
+        <td class="text-end">${formatVND(h.phi_dich_vu)}</td>
+        <td class="text-end fw-bold">${formatVND(h.tong_tien)}</td>
+        <td class="text-center"><span class="badge ${isDone ? 'badge-da_tt' : 'badge-chua_tt'}">${isDone ? '✅ Đã TT' : '⬜ Chưa TT'}</span></td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary" onclick="showDetail(${h.hoadon_id})"><i class="bi bi-eye"></i></button>
+          <a class="btn btn-sm btn-outline-danger ms-1" href="/api/hoa-don/${h.hoadon_id}/pdf" target="_blank"><i class="bi bi-file-pdf"></i></a>
+        </td>
+      </tr>`;
+    }).join('');
+    document.getElementById('tfoot-tong').textContent = formatVND(tong);
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function showDetail(id) {
+  try {
+    const { data: h } = await fetchAPI(`/api/hoa-don/detail/${id}`);
+    document.getElementById('detail-title').textContent = `Hóa đơn — Phòng ${h.so_phong} — ${h.thang}/${h.nam}`;
+    document.getElementById('detail-body').innerHTML = `
+      <p class="mb-1 text-muted small">Khách: <strong>${h.ho_ten}</strong></p>
+      <hr>
+      <div class="d-flex justify-content-between"><span>Tiền phòng</span><span>${formatVND(h.tien_phong)}</span></div>
+      <div class="d-flex justify-content-between"><span>Tiền điện</span><span>${formatVND(h.tien_dien)}</span></div>
+      <div class="d-flex justify-content-between"><span>Tiền nước</span><span>${formatVND(h.tien_nuoc)}</span></div>
+      <div class="d-flex justify-content-between"><span>Phí dịch vụ</span><span>${formatVND(h.phi_dich_vu)}</span></div>
+      <hr>
+      <div class="d-flex justify-content-between fw-bold fs-5"><span>TỔNG CỘNG</span><span class="text-primary">${formatVND(h.tong_tien)}</span></div>
+      <p class="mt-2 mb-0 text-muted small">Ngày tạo: ${formatDate(h.ngay_tao)}</p>`;
+    document.getElementById('btn-pdf').href = `/api/hoa-don/${id}/pdf`;
+    detailModal.show();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+
+async function generateAll() {
+  const thang = document.getElementById('sel-thang').value;
+  const nam   = document.getElementById('sel-nam').value;
+  if (!confirm(`Tính hóa đơn tất cả phòng tháng ${thang}/${nam}?`)) return;
+  try {
+    const { data } = await fetchAPI(`/api/hoa-don/generate-all/${thang}/${nam}`, 'POST');
+    const errMsg = data.errors.length ? ` (${data.errors.length} lỗi)` : '';
+    showToast(`Đã tính ${data.generated.length} hóa đơn${errMsg}`, data.errors.length ? 'warning' : 'success');
+    loadHD();
+  } catch (e) { showToast(e.message, 'danger'); }
+}
+</script>
+{% endblock %}

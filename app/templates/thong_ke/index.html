@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Thống Kê{% endblock %}
+{% block page_title %}Thống Kê Doanh Thu{% endblock %}
+
+{% block content %}
+<!-- Filter -->
+<div class="d-flex gap-2 align-items-center mb-3">
+  <select class="form-select form-select-sm w-auto" id="sel-nam"></select>
+  <button class="btn btn-sm btn-outline-secondary" onclick="loadStats()">Xem</button>
+</div>
+
+<!-- Chart -->
+<div class="card p-4 mb-3">
+  <h6 class="section-title">Doanh thu theo tháng</h6>
+  <canvas id="chart-yearly" height="90"></canvas>
+</div>
+
+<!-- Table -->
+<div class="card">
+  <div class="table-responsive">
+    <table class="table mb-0 align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Tháng</th>
+          <th class="text-end">Doanh thu</th>
+          <th class="text-end">Số hóa đơn</th>
+        </tr>
+      </thead>
+      <tbody id="stat-tbody"></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/thong_ke.js') }}"></script>
+{% endblock %}

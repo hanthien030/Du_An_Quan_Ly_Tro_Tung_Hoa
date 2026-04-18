@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Quản Lý Phòng{% endblock %}
+{% block page_title %}Quản Lý Phòng{% endblock %}
+
+{% block content %}
+<!-- Toolbar -->
+<div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+  <button class="btn btn-primary btn-sm" onclick="openModal()">
+    <i class="bi bi-plus-lg me-1"></i>Thêm Phòng
+  </button>
+  <select id="filter-tt" class="form-select form-select-sm w-auto" onchange="loadRooms()">
+    <option value="">Tất cả</option>
+    <option value="trong">Trống</option>
+    <option value="dang_thue">Đang thuê</option>
+    <option value="sua_chua">Sửa chữa</option>
+  </select>
+</div>
+
+<!-- Grid -->
+<div id="room-grid" class="row g-3"></div>
+
+<!-- Modal CRUD -->
+<div class="modal fade" id="roomModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-title">Thêm Phòng</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-id">
+        <div class="mb-3">
+          <label class="form-label">Số phòng <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="f-so_phong" placeholder="101, A2...">
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col">
+            <label class="form-label">Tầng</label>
+            <input type="number" class="form-control" id="f-tang" value="1" min="1">
+          </div>
+          <div class="col">
+            <label class="form-label">Diện tích (m²)</label>
+            <input type="number" class="form-control" id="f-dien_tich" step="0.1">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Cấp phòng</label>
+          <div class="d-flex gap-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="cap" id="cap1" value="cap1" checked>
+              <label class="form-check-label" for="cap1">Cấp 1 (cơ bản)</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="cap" id="cap2" value="cap2">
+              <label class="form-check-label" for="cap2">Cấp 2 (đầy đủ)</label>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Trạng thái</label>
+          <select class="form-select" id="f-trang_thai">
+            <option value="trong">Trống</option>
+            <option value="dang_thue">Đang thuê</option>
+            <option value="sua_chua">Sửa chữa</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label class="form-label">Ghi chú</label>
+          <textarea class="form-control" id="f-mo_ta" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Hủy</button>
+        <button class="btn btn-primary btn-sm" onclick="saveRoom()">Lưu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal chi tiết -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detail-title">Phòng —</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="detail-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline-primary btn-sm" id="btn-edit-detail">Sửa</button>
+        <button class="btn btn-outline-danger btn-sm" id="btn-del-detail">Xóa</button>
+        <button class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/phong.js') }}"></script>
+{% endblock %}
