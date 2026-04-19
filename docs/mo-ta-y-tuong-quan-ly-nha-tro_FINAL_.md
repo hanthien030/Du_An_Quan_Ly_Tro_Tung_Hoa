@@ -327,14 +327,14 @@ Tổng tiền   = Tiền phòng + Tiền điện + Tiền nước + Phí DV
 
 Theo yêu cầu của giáo viên, sản phẩm cần đạt:
 
-- [ ] Giao diện front-end hoàn chỉnh (HTML, CSS, JavaScript)
-- [ ] Kết nối và truy vấn được cơ sở dữ liệu
-- [ ] Có ít nhất 1 ngôn ngữ xử lý nghiệp vụ phía back-end
-- [ ] Front-end lấy dữ liệu động từ back-end (không hardcode)
-- [ ] Bảng giá tháng được khóa đúng quy tắc (không sửa tháng đã có hóa đơn)
-- [ ] Hóa đơn tính tự động, chính xác theo Bảng giá và Thanh toán hàng tháng
-- [ ] Báo cáo mô tả đầy đủ: sơ đồ DB, mô tả nghiệp vụ, quan hệ bảng
-- [ ] Demo được các chức năng khi vấn đáp
+- [x] Giao diện front-end hoàn chỉnh (HTML, CSS, JavaScript)
+- [x] Kết nối và truy vấn được cơ sở dữ liệu
+- [x] Có ít nhất 1 ngôn ngữ xử lý nghiệp vụ phía back-end
+- [x] Front-end lấy dữ liệu động từ back-end (không hardcode)
+- [x] Bảng giá tháng được khóa đúng quy tắc (không sửa tháng đã có hóa đơn)
+- [x] Hóa đơn tính tự động, chính xác theo Bảng giá và Thanh toán hàng tháng
+- [x] Báo cáo mô tả đầy đủ: sơ đồ DB, mô tả nghiệp vụ, quan hệ bảng
+- [x] Demo được các chức năng khi vấn đáp
 
 ---
 
