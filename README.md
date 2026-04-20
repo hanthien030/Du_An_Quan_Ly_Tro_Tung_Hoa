@@ -2,16 +2,6 @@
 
 Ứng dụng web Flask quản lý dãy trọ quy mô nhỏ, phục vụ demo và handoff cho bài toán quản lý phòng, khách thuê, hợp đồng, thanh toán tháng, hóa đơn và thống kê doanh thu.
 
-## Trạng thái hiện tại
-
-Phase 0, Phase 1 và Phase 3 đã hoàn tất theo `PLAN.md`.
-
-Phase 4 đã hoàn tất mục seed demo: bộ dữ liệu mẫu hiện có `12 phòng` và `3 tháng dữ liệu` để phục vụ dashboard, thanh toán, hóa đơn và thống kê.
-
-Phase 2 hiện chỉ còn giữ `[ ]` cho `pdf/hoa_don_pdf.html` theo strict mode, vì runtime dev vẫn đang dùng fallback PDF khi WeasyPrint thiếu native library để render HTML -> PDF đầy đủ.
-
-Chi tiết handoff và known limitations được ghi trong [HANDOFF_NOTES.md](</c:/Users/Admin/Desktop/DuAnQuanLyTro/HANDOFF_NOTES.md:1>).
-
 ## Stack công nghệ
 
 - Backend: Python 3.10+ / Flask 3
@@ -37,8 +27,6 @@ static/
 tests/                 Pytest suite
 seed.py                Tạo dữ liệu demo
 run.py                 Entry point chạy Flask app
-PLAN.md                Checklist và mô tả dự án
-HANDOFF_NOTES.md       Ghi chú handoff/demo cuối
 nha_tro.dbml           DBML để dán vào dbdiagram.io
 schema.sql             SQL schema tham chiếu theo cấu trúc hiện tại
 Cấu Trúc Thư Mục.md    Mô tả cây thư mục repo
@@ -199,11 +187,3 @@ Trong một số máy Windows, WeasyPrint có thể cần thêm native libraries
 - người nhận vẫn có một file PDF có nội dung cơ bản
 
 Nếu muốn sử dụng HTML PDF đầy đủ, hãy kiểm tra cài đặt WeasyPrint và các thư viện native liên quan trên máy demo.
-
-## Tài liệu handoff thêm
-
-- [PLAN.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/PLAN.md:1): source of truth về checklist và phạm vi dự án
-- [HANDOFF_NOTES.md](/c:/Users/Admin/Desktop/DuAnQuanLyTro/HANDOFF_NOTES.md:1): tóm tắt tình trạng handoff/demo cuối, các mục còn treo và known limitations
-- [nha_tro.dbml](</c:/Users/Admin/Desktop/DuAnQuanLyTro/nha_tro.dbml:1>): sơ đồ DBML để dán vào dbdiagram.io
-- [schema.sql](</c:/Users/Admin/Desktop/DuAnQuanLyTro/schema.sql:1>): SQL schema tham chiếu từ cấu trúc hiện tại
-- [Cấu Trúc Thư Mục.md](</c:/Users/Admin/Desktop/DuAnQuanLyTro/Cấu Trúc Thư Mục.md:1>): cây thư mục repo ở mức handoff
